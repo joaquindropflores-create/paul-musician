@@ -1,0 +1,21 @@
+
+name: Comprobar Paul
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  compilar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Compilar pruebas musicales
+        run: g++ -std=c++17 -Wall -Wextra -pedantic music_core.cpp music_core_test.cpp -o music_core_test
+
+      - name: Ejecutar pruebas
+        run: ./music_core_test
+        
