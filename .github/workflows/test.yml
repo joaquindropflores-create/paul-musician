@@ -2,20 +2,28 @@
 name: Comprobar Paul
 
 on:
-  push:
-  workflow_dispatch:
+push:
+workflow_dispatch:
 
 jobs:
-  compilar:
-    runs-on: ubuntu-latest
+compilar:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Descargar codigo
-        uses: actions/checkout@v4
+steps:
+  - name: Descargar codigo
+    uses: actions/checkout@v4
 
-      - name: Compilar pruebas musicales
-        run: g++ -std=c++17 -Wall -Wextra -pedantic music_core.cpp music_core_test.cpp -o music_core_test
+  - name: Compilar pruebas
+    run: |
+      g++ -std=c++17 -Wall -Wextra -pedantic music_core.cpp music_core_test.cpp -o music_core_test
+      g++ -std=c++17 -Wall -Wextra -pedantic rhythm_engine.cpp rhythm_engine_test.cpp -o rhythm_engine_test
+      g++ -std=c++17 -Wall -Wextra -pedantic rhythm_engine.cpp audio_engine.cpp audio_engine_test.cpp -o audio_engine_test
 
-      - name: Ejecutar pruebas
-        run: ./music_core_test
-        
+  - name: Ejecutar pruebas musicales
+    run: ./music_core_test
+
+  - name: Ejecutar pruebas ritmicas
+    run: ./rhythm_engine_test
+
+  - name: Generar y verificar audio WAV
+    run: ./audio_engine_test
