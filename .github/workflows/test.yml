@@ -1,27 +1,38 @@
-name: Comprobar Paul
+name: Pruebas
 
-'on':
-push:
-workflow_dispatch:
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
-compilar:
-runs-on: ubuntu-latest
-steps:
-- name: Descargar codigo
-uses: actions/checkout@v4
+  compilar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
 
-  - name: Compilar pruebas
-    run: |
-      g++ -std=c++17 -Wall -Wextra -pedantic music_core.cpp music_core_test.cpp -o music_core_test
-      g++ -std=c++17 -Wall -Wextra -pedantic rhythm_engine.cpp rhythm_engine_test.cpp -o rhythm_engine_test
-      g++ -std=c++17 -Wall -Wextra -pedantic rhythm_engine.cpp audio_engine.cpp audio_engine_test.cpp -o audio_engine_test
+      - name: Compilar pruebas del motor musical
+        run: g++ -std=c++17 -Wall -Wextra -pedantic music_core.cpp music_core_test.cpp -o music_core_test
 
-  - name: Ejecutar pruebas musicales
-    run: ./music_core_test
+      - name: Compilar pruebas del motor ritmico
+        run: g++ -std=c++17 -Wall -Wextra -pedantic rhythm_engine.cpp rhythm_engine_test.cpp -o rhythm_engine_test
 
-  - name: Ejecutar pruebas ritmicas
-    run: ./rhythm_engine_test
+      - name: Compilar motor de audio
+        run: g++ -std=c++17 -Wall -Wextra -pedantic rhythm_engine.cpp audio_engine.cpp audio_engine_test.cpp -o audio_engine_test
 
-  - name: Generar y verificar audio WAV
-    run: ./audio_engine_test
+      - name: Ejecutar pruebas del motor musical
+        run: ./music_core_test
+
+      - name: Ejecutar pruebas del motor ritmico
+        run: ./rhythm_engine_test
+
+      - name: Ejecutar pruebas del motor de audio
+        run: ./audio_engine_test
+
+      - name: Verificar paul_test.wav
+        run: |
+          test -f paul_test.wav
+          test -s paul_test.wav
+          test "$(head -c 4 paul_test.wav)" = "RIFF"
+          test "$(dd if=paul_test.wav bs=1 skip=8 count=4 2>/dev/null)" = "WAVE"
+          ls -l paul_test.wav
