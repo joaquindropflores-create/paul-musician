@@ -1,4 +1,3 @@
-
 name: Comprobar Paul
 
 on:
@@ -8,10 +7,9 @@ workflow_dispatch:
 jobs:
 compilar:
 runs-on: ubuntu-latest
-
 steps:
-  - name: Descargar codigo
-    uses: actions/checkout@v4
+- name: Descargar codigo
+uses: actions/checkout@v4
 
   - name: Compilar pruebas
     run: |
