@@ -26,11 +26,29 @@ int main() {
     char header[12] = {};
     file.read(header, sizeof(header));
 
-    if (!file || std::string(header, 4) != "RIFF" ||
-        std::string(header + 8, 4) != "WAVE") {
-        std::cerr << "ERROR: archivo WAV invalido\n";
-        return 1;
+    if (!file) {
+    std::cerr << "ERROR: no se pudieron leer 12 bytes\n";
+    return 1;
+}
+
+std::cerr << "Diagnostico WAV: ";
+for (int i = 0; i < 12; ++i) {
+    const unsigned char c =
+        static_cast<unsigned char>(header[i]);
+
+    if (c >= 32 && c <= 126) {
+        std::cerr << static_cast<char>(c);
+    } else {
+        std::cerr << "[" << static_cast<int>(c) << "]";
     }
+}
+std::cerr << '\n';
+
+if (std::string(header, 4) != "RIFF" ||
+    std::string(header + 8, 4) != "WAVE") {
+    std::cerr << "ERROR: cabecera WAV incorrecta\n";
+    return 1;
+}
 
     file.seekg(0, std::ios::end);
 
