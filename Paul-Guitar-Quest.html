@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paul Guitar Quest — Music Waves</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --site-primary: #287C78;
+  --site-on-primary: #FFFFFF;
+  --site-secondary: #553B91;
+  --site-on-secondary: #FFFFFF;
+  --site-background: #10121C;
+  --site-on-background: #F5F4FA;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  --bg: light-dark(#f5f6fa, #10121c);
+  --surface: light-dark(#ffffff, #191c29);
+  --surface2: light-dark(#edf0f6, #222638);
+  --ink: light-dark(#171927, #f5f4fa);
+  --muted: light-dark(#61677b, #a8aec3);
+  --line: light-dark(#dfe3ed, #34394d);
+  --lime: #d7ff72;
+  --purple: #a78bfa;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--site-font-body); }
+button, input { font: inherit; }
+button { cursor: pointer; }
+#app { min-height: 100vh; width: 100%; background-color: var(--site-background); color: var(--site-on-background); overflow: hidden; }
+.topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px clamp(18px,4vw,54px); border-bottom:1px solid #ffffff20; background:linear-gradient(105deg,#10121c,#1d1830 58%,#122c2d); }
+.brand { display:flex; align-items:center; gap:11px; font-weight:850; letter-spacing:.06em; }
+.brand-mark { width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:var(--site-primary);color:white;font-size:23px;box-shadow:0 0 28px #287c7855; }
+.brand small { display:block; font-size:10px; letter-spacing:.2em; color:#b6bbcf; font-weight:650; margin-top:3px; }
+.top-tag { color:var(--lime);border:1px solid #d7ff7250;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:800;letter-spacing:.12em; }
+.hero { padding:clamp(30px,6vw,72px) clamp(18px,5vw,72px) 35px; background:radial-gradient(ellipse at 82% 18%,#553b9144,transparent 34%),radial-gradient(ellipse at 18% 70%,#287c7833,transparent 35%),linear-gradient(130deg,#10121c,#161728); }
+.eyebrow { color:var(--lime);font-size:11px;font-weight:850;letter-spacing:.2em;text-transform:uppercase; }
+h1 { font-family:var(--site-font-heading);font-size:clamp(35px,6vw,70px);line-height:.98;letter-spacing:-.055em;margin:14px 0 18px;max-width:850px; }
+h1 span { color:var(--lime); }
+.hero p { color:#c6c9d8;max-width:680px;font-size:clamp(14px,1.6vw,18px);line-height:1.65;margin:0; }
+.hero-bottom { display:flex;flex-wrap:wrap;gap:9px;margin-top:25px; }
+.pill { border:1px solid #ffffff2a;background:#ffffff0c;padding:9px 12px;border-radius:999px;font-size:12px;color:#e2e3ed; }
+main { max-width:1240px;margin:auto;padding:28px clamp(14px,3vw,34px) 60px; }
+.layout { display:grid;grid-template-columns:minmax(0,1.45fr) minmax(285px,.8fr);gap:20px;align-items:start; }
+.panel { border:1px solid var(--line);border-radius:22px;background:var(--surface);color:var(--ink);overflow:hidden; }
+.panel-head { display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px 22px;border-bottom:1px solid var(--line); }
+.panel-head h2 { margin:0;font-size:17px;letter-spacing:-.02em; }
+.panel-head small { color:var(--muted);font-size:11px;letter-spacing:.1em;font-weight:800; }
+.panel-body { padding:22px; }
+.mission { background:linear-gradient(115deg,#287c7818,#553b9110);border:1px solid #287c7840;border-radius:16px;padding:17px;margin-bottom:19px; }
+.mission-label { font-size:10px;letter-spacing:.18em;color:var(--site-primary);font-weight:900;text-transform:uppercase; }
+.mission h3 { margin:8px 0 6px;font-size:23px;letter-spacing:-.04em; }
+.mission p { margin:0;color:var(--muted);line-height:1.55;font-size:13px; }
+.stats { display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 22px; }
+.stat { background:var(--surface2);border-radius:13px;padding:12px; }
+.stat label { color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;display:block; }
+.stat strong { display:block;font-size:22px;margin-top:5px; }
+.progress { height:6px;background:var(--surface2);border-radius:9px;overflow:hidden;margin:9px 0 20px; }
+.progress span { display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--site-primary),var(--purple));transition:width .3s; }
+.section-label { font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:850;margin:20px 0 10px; }
+.sequence { display:flex;gap:8px;flex-wrap:wrap; }
+.note { flex:1;min-width:48px;text-align:center;border-radius:12px;padding:12px 5px;border:1px solid var(--line);background:var(--surface2); }
+.note b { display:block;font-size:19px; }
+.note small { display:block;color:var(--muted);font-size:10px;margin-top:3px; }
+.note.active { border-color:var(--site-primary);box-shadow:inset 0 0 0 1px var(--site-primary);background:#287c781a; }
+.fretboard { background:linear-gradient(90deg,#31261f,#49362a);border:1px solid #7a5a40;border-radius:14px;padding:15px 12px;margin-top:10px;overflow:hidden; }
+.string-row { display:grid;grid-template-columns:38px repeat(6,minmax(27px,1fr));gap:0;align-items:center;min-width:280px; }
+.string-row + .string-row { margin-top:5px; }
+.string-name { font-size:10px;color:#f2d9b8;font-weight:800; }
+.fret { height:28px;display:grid;place-items:center;border-left:2px solid #d0b18b99;position:relative; }
+.fret:after { content:"";position:absolute;height:2px;left:0;right:0;top:50%;background:#d9c4a2a8; }
+.fret button { position:relative;z-index:1;width:25px;height:25px;border-radius:50%;border:1px solid #ffffff80;background:#f3e6cf;color:#32261d;font-size:10px;font-weight:900;padding:0; }
+.fret button.selected { background:var(--lime);border-color:var(--lime);box-shadow:0 0 0 3px #d7ff7235; }
+.fret button:focus-visible, .btn:focus-visible { outline:3px solid var(--purple);outline-offset:3px; }
+.helper { font-size:11px;color:#d6c2a8;margin:10px 0 0;line-height:1.5; }
+.controls { display:flex;gap:9px;flex-wrap:wrap;margin-top:16px; }
+.btn { border:0;border-radius:12px;padding:12px 16px;font-size:13px;font-weight:850;transition:transform .15s,opacity .15s; }
+.btn:hover { transform:translateY(-1px); }
+.btn-primary { background:var(--site-primary);color:#fff; }
+.btn-dark { background:var(--surface2);color:var(--ink);border:1px solid var(--line); }
+.btn-lime { background:var(--lime);color:#172016; }
+.feedback { margin-top:15px;border-radius:13px;padding:13px 14px;background:var(--surface2);font-size:13px;line-height:1.55;min-height:48px; }
+.feedback strong { color:var(--site-primary); }
+.side-stack { display:grid;gap:20px; }
+.paul-card { background:linear-gradient(145deg,#1e2637,#201938);color:#f5f4fa;border:1px solid #474260; }
+.paul-head { display:flex;align-items:center;gap:13px; }
+.avatar { width:48px;height:48px;border-radius:15px;background:linear-gradient(145deg,#287c78,#7152ba);display:grid;place-items:center;font-size:25px;box-shadow:0 8px 25px #0003; }
+.paul-head h2 { margin:0;font-size:18px; }
+.paul-head p { margin:4px 0 0;color:#b9bfd0;font-size:11px; }
+.chatbubble { margin-top:17px;padding:15px;border-radius:4px 15px 15px 15px;background:#ffffff0e;border:1px solid #ffffff15;font-size:14px;line-height:1.65;color:#e6e6f0; }
+.chatbubble em { color:var(--lime);font-style:normal;font-weight:800; }
+.voice-controls { display:flex;gap:8px;flex-wrap:wrap;margin-top:12px; }
+.voice-controls .btn { padding:10px 12px;font-size:12px; }
+.choice-list { display:grid;gap:8px;margin-top:13px; }
+.choice { text-align:left;background:#ffffff09;border:1px solid #ffffff24;color:#f5f4fa;padding:12px;border-radius:12px;font-size:12px;line-height:1.45; }
+.choice:hover,.choice.chosen { border-color:var(--lime);background:#d7ff7212; }
+.choice small { display:block;color:#b5b9ca;margin-top:3px; }
+.progress-list { display:grid;gap:13px; }
+.stage { display:flex;gap:11px;align-items:flex-start; }
+.stage-icon { flex:0 0 29px;width:29px;height:29px;border-radius:10px;background:var(--surface2);display:grid;place-items:center;color:var(--muted);font-size:12px;font-weight:900; }
+.stage.done .stage-icon { background:#287c7820;color:var(--site-primary); }
+.stage.current .stage-icon { background:var(--site-secondary);color:white; }
+.stage strong { display:block;font-size:13px; }
+.stage small { color:var(--muted);font-size:11px;display:block;margin-top:3px;line-height:1.45; }
+.pitch { margin-top:22px;padding:24px;border-radius:20px;background:linear-gradient(110deg,#287c781c,#553b911a);border:1px solid #287c7838;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center; }
+.pitch h2 { margin:7px 0 8px;font-size:22px;letter-spacing:-.03em; }
+.pitch p { color:var(--muted);font-size:13px;line-height:1.65;margin:0;max-width:740px; }
+.pitch .btn { white-space:nowrap; }
+.disclaimer { margin-top:16px;font-size:11px;color:var(--muted);line-height:1.6; }
+.modal-backdrop { position:fixed;inset:0;background:#080a12cc;display:none;place-items:center;padding:18px;z-index:5; }
+.modal-backdrop.open { display:grid; }
+.modal { width:min(600px,100%);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:22px;padding:24px;max-height:90vh;overflow:auto; }
+.modal h2 { margin:0 0 8px; }
+.modal p { color:var(--muted);font-size:13px;line-height:1.6; }
+.metric-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0; }
+.metric { padding:14px;border-radius:13px;background:var(--surface2); }
+.metric b { display:block;font-size:20px; }
+.metric small { color:var(--muted);font-size:10px; }
+@media(max-width:850px) { .layout{grid-template-columns:1fr}.side-stack{grid-template-columns:1fr 1fr}.pitch{grid-template-columns:1fr}.pitch .btn{justify-self:start} }
+@media(max-width:580px) { .side-stack{grid-template-columns:1fr}.top-tag{display:none}.panel-body{padding:16px}.panel-head{padding:17px}.stats{gap:7px}.stat{padding:10px}.stat strong{font-size:19px}.hero{padding-top:38px}.metric-grid{grid-template-columns:1fr 1fr 1fr} }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">♫</div><div>MUSIC WAVES<small>CREATIVITY, AMPLIFIED</small></div></div>
+    <div class="top-tag">INVESTOR PLAYTEST · PROTOTYPE 01</div>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">WHIPLASH · INTERACTIVE MUSIC EXPERIENCE</div>
+    <h1>Tu idea.<br><span>Tu guitarra.</span><br>Tu próxima canción.</h1>
+    <p>Conoce a Paul: un compañero musical que transforma la práctica en una misión creativa. Toca, elige, experimenta y construye un riff propio en unos minutos.</p>
+    <div class="hero-bottom"><span class="pill">🎸 Diseñado para principiantes</span><span class="pill">⚡ Retos por turnos</span><span class="pill">🧠 Creatividad primero</span></div>
+  </section>
+  <main>
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-head"><h2>🎮 Tu primera misión</h2><small id="round-label">MISIÓN 01 / 04</small></div>
+        <div class="panel-body">
+          <div class="mission"><div class="mission-label">CAMPAÑA 001 · EL DESPERTAR DEL RIFF</div><h3 id="mission-title">Encuentra tu sonido</h3><p id="mission-desc">Toca las notas Mi, Sol y La para construir la primera frase de tu riff. No hace falta tocar rápido: busca un sonido claro y con intención.</p></div>
+          <div class="stats"><div class="stat"><label>Experiencia</label><strong><span id="xp">0</span> XP</strong></div><div class="stat"><label>Racha</label><strong id="streak">0 🔥</strong></div><div class="stat"><label>Nivel</label><strong id="level">01</strong></div></div>
+          <div class="progress"><span id="progress-bar"></span></div>
+          <div class="section-label">Frase sugerida · Mi menor</div>
+          <div class="sequence" id="sequence"><div class="note"><b>Mi</b><small>E · cuerda 6</small></div><div class="note"><b>Sol</b><small>G · traste 3</small></div><div class="note"><b>La</b><small>A · traste 5</small></div><div class="note"><b>Sol</b><small>G · traste 3</small></div><div class="note"><b>Mi</b><small>E · cuerda 6</small></div></div>
+          <div class="section-label">Explora el mástil · sexta cuerda</div>
+          <div class="fretboard" aria-label="Diapasón interactivo de la sexta cuerda"><div class="string-row"><span class="string-name">TRASTE</span><span class="string-name">0</span><span class="string-name">1</span><span class="string-name">2</span><span class="string-name">3</span><span class="string-name">4</span><span class="string-name">5</span></div><div class="string-row" id="fret-row"><span class="string-name">E ↓</span></div></div>
+          <p class="helper">Toca las notas físicamente en tu guitarra. Los botones del diapasón son una guía visual: esta demo no escucha ni reconoce el audio de tu instrumento.</p>
+          <div class="controls"><button class="btn btn-primary" id="play-btn">✓ Ya toqué la frase</button><button class="btn btn-dark" id="hint-btn">Necesito una pista</button><button class="btn btn-dark" id="reset-btn">Reiniciar ronda</button></div>
+          <div class="feedback" id="feedback" aria-live="polite">Tu misión empieza cuando estés listo. Toca la frase y luego cuéntale a Paul cómo te fue.</div>
+        </div>
+      </section>
+      <aside class="side-stack">
+        <section class="panel paul-card"><div class="panel-body"><div class="paul-head"><div class="avatar">♫</div><div><h2>Paul</h2><p>Tu compañero musical · Whiplash</p></div></div><div class="chatbubble" id="paul-line">¡Ey, guitarrista! No buscamos perfección. Buscamos una idea que tenga algo que decir. <em>¿Listo para crear tu primer riff?</em></div><div class="voice-controls"><button class="btn btn-lime" id="speak-btn">🔊 Escuchar a Paul</button><button class="btn btn-dark" id="stop-voice-btn">⏹ Detener voz</button></div><div class="section-label" style="color:#b8bdd0">¿Cómo te fue?</div><div class="choice-list" id="choices"><button class="choice" data-result="great">🔥 Lo logré <small>Toqué la frase completa.</small></button><button class="choice" data-result="partial">🎯 Casi lo tengo <small>Algunas notas me costaron.</small></button><button class="choice" data-result="help">🧭 Guíame <small>Necesito bajar la dificultad.</small></button></div></div></section>
+        <section class="panel"><div class="panel-head"><h2>Ruta de progreso</h2><small>4 TURNOS</small></div><div class="panel-body"><div class="progress-list" id="stages"><div class="stage current"><div class="stage-icon">1</div><div><strong>Encuentra tu sonido</strong><small>Conoce cinco notas y arma un riff.</small></div></div><div class="stage"><div class="stage-icon">2</div><div><strong>Cambia una pieza</strong><small>Haz que la frase suene a ti.</small></div></div><div class="stage"><div class="stage-icon">3</div><div><strong>Elige una emoción</strong><small>Convierte una idea en intención.</small></div></div><div class="stage"><div class="stage-icon">4</div><div><strong>Tu mini composición</strong><small>Combina tus decisiones en una frase final.</small></div></div></div></div></section>
+      </aside>
+    </div>
+    <section class="pitch"><div><div class="eyebrow" style="color:var(--site-primary)">MÁS QUE UNA LECCIÓN</div><h2>Aprender música haciendo música.</h2><p>Paul Guitar Quest demuestra una posible experiencia de Whiplash: retos guiados, decisiones creativas y progresión visible. La siguiente etapa puede incorporar análisis de grabaciones y acompañamientos; estas capacidades no están activadas en este prototipo.</p></div><button class="btn btn-primary" id="investor-btn">Ver resumen para inversionistas ↗</button></section>
+    <p class="disclaimer">Prototipo conceptual para demostración. La voz de Paul utiliza la función de lectura del navegador o dispositivo; no es una voz clonada ni una conexión a una IA. La puntuación registra decisiones dentro de la experiencia; no mide objetivamente la precisión de la interpretación. La escucha en tiempo real, generación musical de audio y conexión a servicios de IA no están implementadas aquí.</p>
+  </main>
+</div>
+<div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal"><h2 id="modal-title">La oportunidad de Paul</h2><p>Una demo para experimentar la propuesta de valor, recoger reacciones y conversar sobre qué construir después. No representa métricas de mercado ni funciones ya lanzadas.</p><div class="metric-grid"><div class="metric"><b>4</b><small>ETAPAS JUGABLES</small></div><div class="metric"><b>0</b><small>EQUIPO EXTRA REQUERIDO</small></div><div class="metric"><b>1</b><small>IDEA MUSICAL PROPIA</small></div></div><p><strong>Hipótesis a validar:</strong> ¿una experiencia de retos creativos hace que practicar sea más atractivo y ayuda a las personas a empezar a componer?</p><p><strong>Preguntas para el playtest:</strong> ¿Qué parte fue más divertida? ¿En qué momento necesitarías que Paul escuche tu guitarra? ¿Pagarías por una versión que te acompañe y analice tus ideas?</p><div class="controls"><button class="btn btn-primary" id="close-modal">Volver a jugar</button><button class="btn btn-dark" id="copy-feedback">Copiar preguntas</button></div><div class="feedback" id="copy-status" aria-live="polite"></div></div></div>
+<script>
+(function(){
+ const missions=[
+  {title:'Encuentra tu sonido',desc:'Toca las notas Mi, Sol y La para construir la primera frase de tu riff. No hace falta tocar rápido: busca un sonido claro y con intención.',line:'¡Ey, guitarrista! No buscamos perfección. Buscamos una idea que tenga algo que decir. <em>¿Listo para crear tu primer riff?</em>',xp:20},
+  {title:'Cambia una pieza',desc:'Repite el riff, pero cambia el orden de dos notas o termina en La. La meta no es copiar: es descubrir una variación que te guste.',line:'Buen comienzo. Ahora hagamos una travesura musical: <em>cambia una sola cosa</em>. A veces ahí nace tu estilo.',xp:25},
+  {title:'Elige una emoción',desc:'Toca tu frase tres veces: suave, con tensión y con energía. Elige la versión que mejor cuente una historia.',line:'Las notas son las mismas, pero tu intención puede cambiarlo todo. <em>¿Qué quieres que sienta quien te escucha?</em>',xp:25},
+  {title:'Tu mini composición',desc:'Combina tu riff original, tu variación y tu versión emocional. Toca la secuencia completa y ponle un nombre.',line:'¡Llegó el momento de unirlo todo! No tiene que ser perfecto: tiene que ser tuyo. <em>¡Firma tu primer riff!</em>',xp:30}
+ ];
+ let round=0,xp=0,streak=0,selected=null,doneRounds=[];
+ const $=id=>document.getElementById(id);
+ const row=$('fret-row');
+ function speakPaul(){if(!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window)){$('feedback').textContent='Este visor no admite voz. Abre la demo en Google Chrome y vuelve a intentarlo.';return;}const synth=window.speechSynthesis;synth.cancel();const text=$('paul-line').innerText.trim();const utterance=new SpeechSynthesisUtterance(text);utterance.lang='es-ES';utterance.rate=0.88;utterance.pitch=1.02;const chooseVoice=()=>{const voices=synth.getVoices();const spanish=voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith('es-bo'))||voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith('es-'));if(spanish)utterance.voice=spanish;};chooseVoice();utterance.onstart=()=>{$('feedback').textContent='🔊 Paul está hablando…';};utterance.onend=()=>{$('feedback').textContent='Paul terminó de hablar. Puedes volver a escucharlo cuando quieras.';};utterance.onerror=()=>{$('feedback').textContent='El dispositivo no pudo reproducir la voz. Prueba Chrome y revisa el volumen multimedia y el servicio de voz de Google.';};synth.resume();synth.speak(utterance);if(!synth.getVoices().length){synth.onvoiceschanged=()=>{chooseVoice();synth.onvoiceschanged=null;};}}
+ $('speak-btn').addEventListener('click',speakPaul);
+ $('stop-voice-btn').addEventListener('click',()=>{if('speechSynthesis' in window)window.speechSynthesis.cancel();});
+ ['E','F','F♯','G','G♯','A'].forEach((note,i)=>{const cell=document.createElement('span');cell.className='fret';const b=document.createElement('button');b.type='button';b.textContent=note;b.setAttribute('aria-label','Seleccionar '+note+' en traste '+i);b.addEventListener('click',()=>{selected={note,fret:i};row.querySelectorAll('button').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');$('feedback').textContent='Guía visual: '+note+' en el traste '+i+'. Ahora busca esa posición en tu guitarra y tócala.';});cell.appendChild(b);row.appendChild(cell);});
+ function render(){const m=missions[round];$('round-label').textContent='MISIÓN 0'+(round+1)+' / 04';$('mission-title').textContent=m.title;$('mission-desc').textContent=m.desc;$('paul-line').innerHTML=m.line;$('xp').textContent=xp;$('streak').textContent=streak+' 🔥';$('level').textContent=String(Math.min(4,Math.floor(xp/50)+1)).padStart(2,'0');$('progress-bar').style.width=((round+(doneRounds.includes(round)?1:0))/4*100)+'%';$('stages').querySelectorAll('.stage').forEach((el,i)=>{el.classList.toggle('current',i===round);el.classList.toggle('done',doneRounds.includes(i));el.querySelector('.stage-icon').textContent=doneRounds.includes(i)?'✓':i+1;});$('play-btn').textContent=round===3&&doneRounds.includes(3)?'✓ Misión completada':'✓ Ya toqué la frase';}
+ function advance(result){if(doneRounds.includes(round)){round=Math.min(round+1,3);render();return;}const m=missions[round];let add=m.xp;let msg='';if(result==='great'){streak++;msg='¡Bien ahí! +'+add+' XP. Tómate un segundo para notar qué te gustó de tu sonido.';}else if(result==='partial'){streak=0;add=Math.round(add*.6);msg='Eso también es progreso. +'+add+' XP. Baja el tempo y practica el cambio entre dos notas antes de repetir toda la frase.';}else{streak=0;add=5;msg='Sin presión: +5 XP por seguir intentándolo. Empieza solo con Mi–Sol y repítelo despacio. La misión se adapta a ti.';}xp+=add;doneRounds.push(round);$('feedback').innerHTML='<strong>Paul dice:</strong> '+msg;$('choices').querySelectorAll('button').forEach(b=>b.classList.toggle('chosen',b.dataset.result===result));if(round<3){round++;setTimeout(()=>{render();$('feedback').innerHTML='<strong>Siguiente turno desbloqueado.</strong> '+missions[round].desc;},350);}else{$('progress-bar').style.width='100%';$('paul-line').innerHTML='¡Misión completada! <em>Tu siguiente paso es convertir este riff en una canción.</em>';$('feedback').innerHTML='<strong>¡Campaña completada!</strong> Has ganado '+xp+' XP. Pregúntale a un jugador qué construiría después: ese feedback vale oro.';$('play-btn').textContent='🏆 Campaña completada';$('play-btn').disabled=true;$('play-btn').style.opacity='.65';render();}}
+ $('choices').addEventListener('click',e=>{const b=e.target.closest('button[data-result]');if(b)advance(b.dataset.result);});
+ $('play-btn').addEventListener('click',()=>{if(round===3&&doneRounds.includes(3)){ $('feedback').innerHTML='<strong>Campaña completada.</strong> Reinicia si quieres hacer otra ronda de prueba.';return;}advance('great');});
+ $('hint-btn').addEventListener('click',()=>{$('feedback').innerHTML='<strong>Pista de Paul:</strong> en la sexta cuerda, Mi es al aire, Sol está en el traste 3 y La en el traste 5. Pulsa sin apretar de más y deja un pequeño espacio entre notas.';$('paul-line').innerHTML='Vamos paso a paso. <em>Una nota clara vale más que diez notas apresuradas.</em>';});
+ $('reset-btn').addEventListener('click',()=>{round=0;xp=0;streak=0;doneRounds=[];selected=null;$('play-btn').disabled=false;$('play-btn').style.opacity='1';$('choices').querySelectorAll('button').forEach(b=>b.classList.remove('chosen'));row.querySelectorAll('button').forEach(b=>b.classList.remove('selected'));$('feedback').textContent='Ronda reiniciada. Toca la frase y cuéntale a Paul cómo te fue.';render();});
+ $('investor-btn').addEventListener('click',()=>{$('modal').classList.add('open');$('close-modal').focus();});$('close-modal').addEventListener('click',()=>{$('modal').classList.remove('open');});$('modal').addEventListener('click',e=>{if(e.target===$('modal'))$('modal').classList.remove('open');});$('copy-feedback').addEventListener('click',()=>{const txt='Playtest Paul Guitar Quest\n1. ¿Qué parte fue más divertida?\n2. ¿En qué momento necesitarías que Paul escuche tu guitarra?\n3. ¿Pagarías por una versión que te acompañe y analice tus ideas?';const status=$('copy-status');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>status.textContent='Preguntas copiadas.').catch(()=>status.textContent=txt);}else{status.textContent=txt;}});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')$('modal').classList.remove('open');});render();
+})();
+</script>
+</body>
+</html>
